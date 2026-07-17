@@ -15,6 +15,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
+        sudo apt install -y gcc-5 g++-5
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 100
         #sudo apt remove git
         #sudo apt autoremove
         #sudo apt install pip python3-pip
