@@ -14,10 +14,22 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Install dependencies
+    - name: Install base dependencies
       run: |
         apt-get update
-        apt-get install -y build-essential uuid-dev iasl python3-distutils git nasm gcc-aarch64-linux-gnu curl ca-certificates
+        apt-get install -y build-essential uuid-dev iasl python3-distutils git nasm gcc-aarch64-linux-gnu wget ca-certificates curl
+
+    - name: Download and install GCC 5
+      run: |
+        mkdir -p /tmp/gcc5
+        cd /tmp/gcc5
+        
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/g/gcc-5/gcc-5-base_5.5.0-12ubuntu1_amd64.deb
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/g/gcc-5/gcc-5_5.5.0-12ubuntu1_amd64.deb
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/g/gcc-5/g++-5_5.5.0-12ubuntu1_amd64.deb
+        wget http://archive.ubuntu.com/ubuntu/pool/main/m/mpc/libmpc3_1.0.3-1_amd64.deb || true
+        
+        dpkg -i *.deb || apt-get install -y -f
 
     - name: Verify GCC 5
       run: |
