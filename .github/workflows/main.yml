@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -35,7 +35,7 @@ jobs:
         bash build.sh --device polaris
         mv /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd  /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: zmooth-edk2
         path: |
