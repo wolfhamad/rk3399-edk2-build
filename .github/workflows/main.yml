@@ -5,8 +5,10 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    
+    container:
+      image: ubuntu:18.04
 
     steps:
     - name: Checkout
@@ -14,15 +16,13 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt update
-        sudo apt install -y gcc-5 g++-5
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 100
-        #sudo apt remove git
-        #sudo apt autoremove
-        #sudo apt install pip python3-pip
-        #pip install setuptools
-        sudo apt install -y build-essential uuid-dev iasl python3-distutils git nasm gcc-aarch64-linux-gnu
+        apt-get update
+        apt-get install -y build-essential uuid-dev iasl python3-distutils git nasm gcc-aarch64-linux-gnu curl ca-certificates
+
+    - name: Verify GCC 5
+      run: |
+        gcc-5 --version
+        g++-5 --version
 
     - name: Clone repositories
       run: |
@@ -32,17 +32,19 @@ jobs:
         git clone https://github.com/tianocore/edk2.git -b edk2-stable202002 --recursive --depth=1
         git clone https://github.com/tianocore/edk2-platforms.git -o cfdc7f907d545b14302295b819ea078bc36c6a40 --recursive --depth=1
         git clone https://github.com/strongtz/edk2-rk3399
-        
 
     - name: Build edk2-rk3399
       working-directory: workspace-edk2/edk2-rk3399
+      env:
+        CC: gcc-5
+        CXX: g++-5
       run: |
         bash build.sh --device polaris
-        mv /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd  /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
+        mv workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
+
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
         name: zmooth-edk2
-        path: |
-          /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
+        path: workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
         if-no-files-found: ignore
