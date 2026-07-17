@@ -15,11 +15,11 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt remove git
+        #sudo apt remove git
         #sudo apt autoremove
         #sudo apt install pip python3-pip
-        pip install setuptools
-        sudo apt install -y git build-essential uuid-dev iasl python3-distutils git nasm gcc-aarch64-linux-gnu
+        #pip install setuptools
+        sudo apt install -y build-essential uuid-dev iasl python3-distutils git nasm gcc-aarch64-linux-gnu
 
     - name: Clone repositories
       run: |
