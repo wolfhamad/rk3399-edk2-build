@@ -17,7 +17,7 @@ jobs:
     - name: Install base dependencies
       run: |
         apt-get update
-        apt install build-essential uuid-dev iasl git nasm python3-distutils gcc-aarch64-linux-gnu
+        apt install -y build-essential uuid-dev iasl git nasm python3-distutils gcc-aarch64-linux-gnu
 
 
     - name: Clone repositories
